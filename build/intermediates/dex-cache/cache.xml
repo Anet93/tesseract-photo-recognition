@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="C:\Users\vitalii.mostivskyi\.gradle\caches\modules-2\files-2.1\com.jakewharton\butterknife\7.0.1\d5d13ea991eab0252e3710e5df3d6a9d4b21d461\butterknife-7.0.1.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="d5d13ea991eab0252e3710e5df3d6a9d4b21d461">
+        <dex dex="C:\Users\vitalii.mostivskyi\Documents\NDK_Projects\TessaractTestApp\app\build\intermediates\pre-dexed\debug\butterknife-7.0.1_09ec8252a8718518c3a81bf86651d692c182f176.jar" />
+    </item>
+
+</items>
