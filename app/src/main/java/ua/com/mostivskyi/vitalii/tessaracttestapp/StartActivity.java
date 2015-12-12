@@ -29,15 +29,15 @@ public class StartActivity extends Activity {
 
     private static final String TAG = "TesseractTestApp";
 
-    @Bind(R.id.recognizedTextField) EditText recognizedTextField;
-    @Bind(R.id.takePhotoButton) Button takePhotoButton;
-
-    private final String assetsPath = Environment.getExternalStorageDirectory().toString() + "/TessaractTestApp/";
-    private final String capturedImagePath = assetsPath + "ocr.jpg";
-    private final String lang = "eng";
+    private String assetsPath;
+    private String capturedImagePath;
+    private String lang;
 
     protected static final String PHOTO_TAKEN = "photo_taken";
     protected boolean _taken;
+
+    @Bind(R.id.recognizedTextField) EditText recognizedTextField;
+    @Bind(R.id.takePhotoButton) Button takePhotoButton;
 
     @OnClick(R.id.takePhotoButton)
     public void takePhotoButtonClick(View view) {
@@ -57,6 +57,13 @@ public class StartActivity extends Activity {
     private void Initialize() {
 
         ButterKnife.bind(this);
+        SetUpGlobals();
+    }
+
+    private void SetUpGlobals() {
+        assetsPath = Environment.getExternalStorageDirectory().toString() + getResources().getString(R.string.AssetsFilePath);
+        capturedImagePath = assetsPath + getResources().getString(R.string.CapturedImageName);;
+        lang = getResources().getString(R.string.Language);
     }
 
     // Simple android photo capture:
