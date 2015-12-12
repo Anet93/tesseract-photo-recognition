@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="Language">eng</string>
+    <string name="AssetsFilePath">/TessaractTestApp/</string>
+    <string name="TrainDataPath">tessdata/</string>
+    <string name="CapturedImageName">ocr.jpg</string>
+
+
+</resources>
