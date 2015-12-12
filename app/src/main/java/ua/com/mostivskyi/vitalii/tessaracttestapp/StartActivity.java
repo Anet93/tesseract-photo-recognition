@@ -32,10 +32,9 @@ public class StartActivity extends Activity {
     @Bind(R.id.recognizedTextField) EditText recognizedTextField;
     @Bind(R.id.takePhotoButton) Button takePhotoButton;
 
-    private final String assetsPath = Environment.getExternalStorageDirectory().toString() + getResources().getString(R.string.AssetsFilePath);
-    private final String capturedImagePath = assetsPath + getResources().getString(R.string.CapturedImageName);
-    private final String lang = getResources().getString(R.string.Language);
-
+    private final String assetsPath = Environment.getExternalStorageDirectory().toString() + "/TessaractTestApp/";
+    private final String capturedImagePath = assetsPath + "ocr.jpg";
+    private final String lang = "eng";
 
     protected static final String PHOTO_TAKEN = "photo_taken";
     protected boolean _taken;
