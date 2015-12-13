@@ -2,5 +2,6 @@
     <string name="app_name">Tessaract Test App</string>
     <string name="action_settings">Settings</string>
     <string name="recognizeButtonText">Recognize</string>
+    <string name="recognizeFromFileButtonText">From file</string>
     <string name="text_hint">Recognized text will appear here</string>
 </resources>

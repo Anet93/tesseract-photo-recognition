@@ -43,6 +43,15 @@ public class StartActivity extends Activity {
         startCameraActivity();
     }
 
+    @OnClick(R.id.recognizeFromFileButton)
+    public void recognizeFromFileButtonClick(View view) {
+
+        String imagePath = assetsPath + "myName.jpg";
+        Bitmap image = ImageHelper.getImage(imagePath);
+
+        recognizedTextField.setText(OCREngine.recognize(image));
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
