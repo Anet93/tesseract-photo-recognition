@@ -28,13 +28,12 @@ import ua.com.mostivskyi.vitalii.tessaracttestapp.Helpers.FileHelper;
 public class StartActivity extends Activity {
 
     private static final String TAG = "TesseractTestApp";
+    private static final String PhotoTakenInstanceStateName = "photo_taken";
 
     private String assetsPath;
     private String capturedImagePath;
     private String lang;
-
-    protected static final String PHOTO_TAKEN = "photo_taken";
-    protected boolean _taken;
+    private boolean isPhotoTaken;
 
     @Bind(R.id.recognizedTextField) EditText recognizedTextField;
     @Bind(R.id.takePhotoButton) Button takePhotoButton;
@@ -66,23 +65,10 @@ public class StartActivity extends Activity {
         lang = getResources().getString(R.string.Language);
     }
 
-    // Simple android photo capture:
-    // http://labs.makemachine.net/2010/03/simple-android-photo-capture/
-
-    protected void startCameraActivity() {
-        File file = new File(capturedImagePath);
-        Uri outputFileUri = Uri.fromFile(file);
-
-        final Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
-
-        startActivityForResult(intent, 0);
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        Log.i(TAG, "resultCode: " + resultCode);
+        Log.i(TAG, "onActivity resultCode: " + resultCode);
 
         if (resultCode == -1) {
             onPhotoTaken();
@@ -93,26 +79,40 @@ public class StartActivity extends Activity {
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putBoolean(StartActivity.PHOTO_TAKEN, _taken);
+        outState.putBoolean(StartActivity.PhotoTakenInstanceStateName, isPhotoTaken);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         Log.i(TAG, "onRestoreInstanceState()");
-        if (savedInstanceState.getBoolean(StartActivity.PHOTO_TAKEN)) {
+
+        if (savedInstanceState.getBoolean(StartActivity.PhotoTakenInstanceStateName)) {
             onPhotoTaken();
         }
     }
 
+    // Simple android photo capture:
+    // http://labs.makemachine.net/2010/03/simple-android-photo-capture/
+    protected void startCameraActivity() {
+        File file = new File(capturedImagePath);
+        Uri outputFileUri = Uri.fromFile(file);
+
+        final Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
+
+        startActivityForResult(intent, 0);
+    }
+
     protected void onPhotoTaken() {
-        _taken = true;
+        isPhotoTaken = true;
 
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inSampleSize = 4;
 
         Bitmap bitmap = BitmapFactory.decodeFile(capturedImagePath, options);
 
-        try {
+        try
+        {
             ExifInterface exif = new ExifInterface(capturedImagePath);
             int exifOrientation = exif.getAttributeInt(
                     ExifInterface.TAG_ORIENTATION,
@@ -122,7 +122,8 @@ public class StartActivity extends Activity {
 
             int rotate = 0;
 
-            switch (exifOrientation) {
+            switch (exifOrientation)
+            {
                 case ExifInterface.ORIENTATION_ROTATE_90:
                     rotate = 90;
                     break;
