@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -100,10 +101,10 @@ public class StartActivity extends Activity {
             case GALLERY_REQUEST_CODE:
                 if (resultCode == RESULT_OK) {
                     if(data != null) {
-                        String photoPath = data.getData().getPath();
-                        Log.v(TAG, photoPath);
+                        Uri imageUri = data.getData();
+                        Log.v(TAG, imageUri.getPath());
 
-                        onPhotoSelected(photoPath);
+                        onPhotoSelected(imageUri);
                     }
                 }
                 break;
@@ -155,9 +156,14 @@ public class StartActivity extends Activity {
         }
     }
 
-    private void onPhotoSelected(String imagePath) {
-        Bitmap image = ImageHelper.getImage(imagePath);
+    private void onPhotoSelected(Uri imageUri) {
+        Bitmap image = ImageHelper.getImage(this, imageUri);
 
-        recognizedTextField.setText(OCREngine.recognize(image));
+        if(image == null) {
+            Toast.makeText(this, getString(R.string.canNotOpenImageMessage), Toast.LENGTH_SHORT).show();
+        }
+        else {
+            recognizedTextField.setText(OCREngine.recognize(image));
+        }
     }
 }

@@ -4,4 +4,6 @@
     <string name="recognizeButtonText">Recognize</string>
     <string name="recognizeFromFileButtonText">From file</string>
     <string name="text_hint">Recognized text will appear here</string>
+
+    <string name="canNotOpenImageMessage">Can`t open selected image</string>
 </resources>
