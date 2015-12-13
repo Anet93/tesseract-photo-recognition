@@ -20,9 +20,13 @@ import butterknife.OnClick;
 import ua.com.mostivskyi.vitalii.tessaracttestapp.helpers.FileHelper;
 import ua.com.mostivskyi.vitalii.tessaracttestapp.R;
 import ua.com.mostivskyi.vitalii.tessaracttestapp.helpers.ImageHelper;
+import ua.com.mostivskyi.vitalii.tessaracttestapp.helpers.IntentUtils;
 import ua.com.mostivskyi.vitalii.tessaracttestapp.services.OCREngine;
 
 public class StartActivity extends Activity {
+
+    private static final int CAMERA_REQUEST_CODE = 999;
+    private static final int GALLERY_REQUEST_CODE = 1337;
 
     private static final String TAG = "TesseractTestApp";
     private static final String PhotoTakenInstanceStateName = "photo_taken";
@@ -46,10 +50,8 @@ public class StartActivity extends Activity {
     @OnClick(R.id.recognizeFromFileButton)
     public void recognizeFromFileButtonClick(View view) {
 
-        String imagePath = assetsPath + "myName.jpg";
-        Bitmap image = ImageHelper.getImage(imagePath);
-
-        recognizedTextField.setText(OCREngine.recognize(image));
+        Log.v(TAG, "Starting galary intent");
+        startActivityForResult(IntentUtils.getGalleryIntent(), GALLERY_REQUEST_CODE);
     }
 
     @Override
@@ -83,15 +85,28 @@ public class StartActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        Log.i(TAG, "onActivity resultCode: " + resultCode);
+        Log.i(TAG, "Received an  resultCode: " + requestCode + " " + resultCode + " " + data);
 
-        if (resultCode == -1)
+        switch (requestCode)
         {
-            onPhotoTaken();
-        }
-        else
-        {
-            Log.v(TAG, "User cancelled");
+            case CAMERA_REQUEST_CODE:
+                if (resultCode == RESULT_OK){
+                    onPhotoTaken();
+                }else{
+                    Log.v(TAG, "User cancelled");
+                }
+                break;
+
+            case GALLERY_REQUEST_CODE:
+                if (resultCode == RESULT_OK) {
+                    if(data != null) {
+                        String photoPath = data.getData().getPath();
+                        Log.v(TAG, photoPath);
+
+                        onPhotoSelected(photoPath);
+                    }
+                }
+                break;
         }
     }
 
@@ -122,7 +137,7 @@ public class StartActivity extends Activity {
         final Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
 
-        startActivityForResult(intent, 0);
+        startActivityForResult(intent, CAMERA_REQUEST_CODE);
     }
 
     protected void onPhotoTaken() {
@@ -138,5 +153,11 @@ public class StartActivity extends Activity {
             recognizedTextField.setText(recognizedText);
             recognizedTextField.setSelection(recognizedTextField.getText().toString().length());
         }
+    }
+
+    private void onPhotoSelected(String imagePath) {
+        Bitmap image = ImageHelper.getImage(imagePath);
+
+        recognizedTextField.setText(OCREngine.recognize(image));
     }
 }
