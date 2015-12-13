@@ -1,9 +1,12 @@
 package ua.com.mostivskyi.vitalii.tessaracttestapp.helpers;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.util.Log;
 
 import java.io.IOException;
@@ -79,5 +82,20 @@ public final class ImageHelper {
         Bitmap image = getImage(path);
 
         return fixCameraRotation(image, path);
+    }
+
+    public static Bitmap getImage(Context context, Uri uri) {
+        Bitmap image = null;
+
+        try
+        {
+            image = MediaStore.Images.Media.getBitmap(context.getContentResolver(), uri);
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
+        return image;
     }
 }
