@@ -1,4 +1,4 @@
-package ua.com.mostivskyi.vitalii.tessaracttestapp.Helpers;
+package ua.com.mostivskyi.vitalii.tessaracttestapp.helpers;
 
 import android.content.Context;
 import android.os.Environment;

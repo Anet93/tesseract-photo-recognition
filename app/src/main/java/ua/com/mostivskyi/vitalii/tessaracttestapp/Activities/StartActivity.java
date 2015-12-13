@@ -1,4 +1,4 @@
-package ua.com.mostivskyi.vitalii.tessaracttestapp;
+package ua.com.mostivskyi.vitalii.tessaracttestapp.activities;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,7 +23,8 @@ import com.googlecode.tesseract.android.TessBaseAPI;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import ua.com.mostivskyi.vitalii.tessaracttestapp.Helpers.FileHelper;
+import ua.com.mostivskyi.vitalii.tessaracttestapp.helpers.FileHelper;
+import ua.com.mostivskyi.vitalii.tessaracttestapp.R;
 
 public class StartActivity extends Activity {
 
@@ -70,9 +71,12 @@ public class StartActivity extends Activity {
 
         Log.i(TAG, "onActivity resultCode: " + resultCode);
 
-        if (resultCode == -1) {
+        if (resultCode == -1)
+        {
             onPhotoTaken();
-        } else {
+        }
+        else
+        {
             Log.v(TAG, "User cancelled");
         }
     }
