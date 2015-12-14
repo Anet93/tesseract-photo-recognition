@@ -34,8 +34,10 @@ public class StartActivity extends Activity {
     private String lang;
     private boolean isPhotoTaken;
 
-    @Bind(R.id.recognizedTextField) EditText recognizedTextField;
-    @Bind(R.id.takePhotoButton) Button takePhotoButton;
+    @Bind(R.id.recognizedTextField)
+    EditText recognizedTextField;
+    @Bind(R.id.takePhotoButton)
+    Button takePhotoButton;
 
     @OnClick(R.id.takePhotoButton)
     public void takePhotoButtonClick(View view) {
@@ -67,7 +69,8 @@ public class StartActivity extends Activity {
 
     private void SetUpGlobals() {
         assetsPath = Environment.getExternalStorageDirectory().toString() + getResources().getString(R.string.AssetsFilePath);
-        capturedImagePath = assetsPath + getResources().getString(R.string.CapturedImageName);;
+        capturedImagePath = assetsPath + getResources().getString(R.string.CapturedImageName);
+        ;
         lang = getResources().getString(R.string.Language);
     }
 
@@ -76,12 +79,9 @@ public class StartActivity extends Activity {
 
         Log.i(TAG, "onActivity resultCode: " + resultCode);
 
-        if (resultCode == -1)
-        {
+        if (resultCode == -1) {
             onPhotoTaken();
-        }
-        else
-        {
+        } else {
             Log.v(TAG, "User cancelled");
         }
     }

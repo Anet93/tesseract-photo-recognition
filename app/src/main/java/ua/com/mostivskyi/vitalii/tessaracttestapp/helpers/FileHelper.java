@@ -31,10 +31,8 @@ public final class FileHelper {
         String trainDataFilePath = assetsPath + trainDataPath + trainDataFileName;
 
         //copy drain data file from assets to sd card ((if not exists))
-        if (!(new File(trainDataFilePath)).exists())
-        {
-            try
-            {
+        if (!(new File(trainDataFilePath)).exists()) {
+            try {
                 InputStream in = context.getAssets().open(trainDataPath + trainDataFileName);
                 OutputStream out = new FileOutputStream(trainDataFilePath);
                 copyFile(in, out);
@@ -46,8 +44,7 @@ public final class FileHelper {
         }
     }
 
-    private static void createDirectories(String[] paths)
-    {
+    private static void createDirectories(String[] paths) {
         for (String path : paths) {
             File dir = new File(path);
 
@@ -63,13 +60,11 @@ public final class FileHelper {
         }
     }
 
-    private static void copyFile(InputStream inps, OutputStream outps) throws IOException
-    {
+    private static void copyFile(InputStream inps, OutputStream outps) throws IOException {
         byte[] buffer = new byte[1024];
         int length;
 
-        while ((length = inps.read(buffer)) > 0)
-        {
+        while ((length = inps.read(buffer)) > 0) {
             outps.write(buffer, 0, length);
         }
 

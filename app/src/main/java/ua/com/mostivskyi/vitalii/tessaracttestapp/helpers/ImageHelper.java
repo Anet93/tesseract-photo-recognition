@@ -12,16 +12,12 @@ public final class ImageHelper {
 
     private static final String RotateImageTag = "Rotate image";
 
-    public static Bitmap fixCameraRotation(Bitmap image, String imagePath)
-    {
+    public static Bitmap fixCameraRotation(Bitmap image, String imagePath) {
         ExifInterface exif = null;
 
-        try
-        {
+        try {
             exif = new ExifInterface(imagePath);
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             Log.e(RotateImageTag, "Couldn't correct orientation - " + e.getMessage());
         }
 
@@ -33,8 +29,7 @@ public final class ImageHelper {
 
         int rotate = 0;
 
-        switch (exifOrientation)
-        {
+        switch (exifOrientation) {
             case ExifInterface.ORIENTATION_ROTATE_90:
                 rotate = 90;
                 break;
@@ -50,8 +45,7 @@ public final class ImageHelper {
 
         Log.v(RotateImageTag, "Rotation: " + rotate);
 
-        if (rotate != 0)
-        {
+        if (rotate != 0) {
             int w = image.getWidth();
             int h = image.getHeight();
 
