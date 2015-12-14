@@ -39,8 +39,10 @@ public class StartActivity extends Activity {
     private String lang;
     private boolean isPhotoTaken;
 
-    @Bind(R.id.recognizedTextField) EditText recognizedTextField;
-    @Bind(R.id.takePhotoButton) Button takePhotoButton;
+    @Bind(R.id.recognizedTextField)
+    EditText recognizedTextField;
+    @Bind(R.id.takePhotoButton)
+    Button takePhotoButton;
 
     @OnClick(R.id.takePhotoButton)
     public void takePhotoButtonClick(View view) {
@@ -79,7 +81,8 @@ public class StartActivity extends Activity {
 
     private void SetUpGlobals() {
         assetsPath = Environment.getExternalStorageDirectory().toString() + getResources().getString(R.string.AssetsFilePath);
-        capturedImagePath = assetsPath + getResources().getString(R.string.CapturedImageName);;
+        capturedImagePath = assetsPath + getResources().getString(R.string.CapturedImageName);
+        ;
         lang = getResources().getString(R.string.Language);
     }
 
@@ -88,19 +91,18 @@ public class StartActivity extends Activity {
 
         Log.i(TAG, "Received an  resultCode: " + requestCode + " " + resultCode + " " + data);
 
-        switch (requestCode)
-        {
+        switch (requestCode) {
             case CAMERA_REQUEST_CODE:
-                if (resultCode == RESULT_OK){
+                if (resultCode == RESULT_OK) {
                     onPhotoTaken();
-                }else{
+                } else {
                     Log.v(TAG, "User cancelled");
                 }
                 break;
 
             case GALLERY_REQUEST_CODE:
                 if (resultCode == RESULT_OK) {
-                    if(data != null) {
+                    if (data != null) {
                         Uri imageUri = data.getData();
                         Log.v(TAG, imageUri.getPath());
 
@@ -159,10 +161,9 @@ public class StartActivity extends Activity {
     private void onPhotoSelected(Uri imageUri) {
         Bitmap image = ImageHelper.getImage(this, imageUri);
 
-        if(image == null) {
+        if (image == null) {
             Toast.makeText(this, getString(R.string.canNotOpenImageMessage), Toast.LENGTH_SHORT).show();
-        }
-        else {
+        } else {
             recognizedTextField.setText(OCREngine.recognize(image));
         }
     }
