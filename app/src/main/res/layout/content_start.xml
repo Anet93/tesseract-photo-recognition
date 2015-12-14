@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".activities.StartActivity"
     tools:showIn="@layout/activity_start">
@@ -18,6 +18,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/recognizeButtonText" />
+    <Button
+        android:id="@+id/cropButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/cropButtonText" />
 
     <EditText
         android:id="@+id/recognizedTextField"
@@ -25,27 +30,19 @@
         android:layout_height="wrap_content"
         android:hint="@string/text_hint" />
 
-    <com.isseiaoki.simplecropview.CropImageView
-        android:id="@+id/cropImageView"
-        xmlns:custom="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:padding="16dp"
-        custom:cropMode="ratio_1_1"/>
-
-    <Button
-        android:id="@+id/crop_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="16dp"
-        android:text="@string/cropButtonText"/>
-
     <ImageView
         android:id="@+id/croppedImageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_margin="16dp"/>
+        android:layout_margin="16dp" />
+
+    <com.isseiaoki.simplecropview.CropImageView
+        xmlns:custom="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/cropImageView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        custom:cropMode="ratio_1_1" />
 
 </LinearLayout>
