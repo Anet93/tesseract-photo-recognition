@@ -1,10 +1,12 @@
 package ua.com.mostivskyi.vitalii.tessaracttestapp.activities;
 
 import java.io.File;
+import java.io.FileOutputStream;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -13,6 +15,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+
+import com.isseiaoki.simplecropview.CropImageView;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -31,18 +36,50 @@ public class StartActivity extends Activity {
 
     private String assetsPath;
     private String capturedImagePath;
+    private String capturedCropImagePath;
     private String lang;
     private boolean isPhotoTaken;
+    Bitmap bitmap;
 
     @Bind(R.id.recognizedTextField)
     EditText recognizedTextField;
     @Bind(R.id.takePhotoButton)
     Button takePhotoButton;
+    @Bind(R.id.cropButton)
+    Button cropButton;
+    @Bind(R.id.cropImageView)
+    CropImageView cropImageView;
+    @Bind(R.id.croppedImageView)
+    ImageView croppedImageView;
 
     @OnClick(R.id.takePhotoButton)
     public void takePhotoButtonClick(View view) {
         Log.v(TAG, "Starting Camera app");
         startCameraActivity();
+    }
+
+    @OnClick(R.id.cropButton)
+    public void cropButtonClick(View view) {
+        Log.v(TAG, "Cropping");
+        croppedImageView.setImageBitmap(cropImageView.getCroppedBitmap());
+        createCroppedBitmap();
+        onPhotoTaken();
+    }
+
+    private void createCroppedBitmap() {
+
+        croppedImageView.setDrawingCacheEnabled(true);
+        bitmap = cropImageView.getCroppedBitmap();
+
+        File file = new File(capturedCropImagePath);
+        try {
+            file.createNewFile();
+            FileOutputStream ostream = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, ostream);
+            ostream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -51,26 +88,27 @@ public class StartActivity extends Activity {
         setContentView(R.layout.activity_start);
         ButterKnife.bind(this);
 
-        Initialize();
+        initialize();
     }
 
-    private void Initialize() {
+    private void initialize() {
 
-        SetUpGlobals();
+        setUpGlobals();
         FileHelper.UpdateAssets(this);
-        InitializeOCR();
+        initializeOCR();
     }
 
-    private void InitializeOCR() {
+    private void initializeOCR() {
 
         OCREngine = new OCREngine(assetsPath, lang);
         OCREngine.setDebug(true);
     }
 
-    private void SetUpGlobals() {
+    private void setUpGlobals() {
         assetsPath = Environment.getExternalStorageDirectory().toString() + getResources().getString(R.string.AssetsFilePath);
         capturedImagePath = assetsPath + getResources().getString(R.string.CapturedImageName);
-        ;
+        capturedCropImagePath = assetsPath + getResources().getString(R.string.CapturedCropImageName);
+
         lang = getResources().getString(R.string.Language);
     }
 
@@ -80,10 +118,20 @@ public class StartActivity extends Activity {
         Log.i(TAG, "onActivity resultCode: " + resultCode);
 
         if (resultCode == -1) {
-            onPhotoTaken();
+            performCrop();
         } else {
             Log.v(TAG, "User cancelled");
         }
+    }
+
+    protected void performCrop() {
+        cropImageView.setCropMode(CropImageView.CropMode.RATIO_FREE);
+        cropImageView.setImageBitmap(BitmapFactory.decodeFile(capturedImagePath));
+        cropImageView.setFrameStrokeWeightInDp(1);
+        cropImageView.setGuideStrokeWeightInDp(1);
+        cropImageView.setHandleSizeInDp(6);
+        cropImageView.setTouchPaddingInDp(8);
+        cropImageView.setMinFrameSizeInDp(50);
     }
 
     @Override
@@ -119,7 +167,7 @@ public class StartActivity extends Activity {
     protected void onPhotoTaken() {
         isPhotoTaken = true;
 
-        Bitmap bitmap = ImageHelper.getCapturedImage(capturedImagePath);
+        Bitmap bitmap = ImageHelper.getCapturedImage(capturedCropImagePath);
 
         Log.v(TAG, "Before OCREngine");
         String recognizedText = OCREngine.recognize(bitmap);

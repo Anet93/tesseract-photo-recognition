@@ -4,6 +4,8 @@
     <string name="AssetsFilePath">/TessaractTestApp/</string>
     <string name="TrainDataPath">tessdata/</string>
     <string name="CapturedImageName">ocr.jpg</string>
+    <string name="CapturedCropImageName">cropocr.jpg</string>
+
 
 
 </resources>
