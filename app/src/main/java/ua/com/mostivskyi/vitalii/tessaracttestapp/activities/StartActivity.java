@@ -48,12 +48,16 @@ public class StartActivity extends Activity {
 
     @Bind(R.id.recognizedTextField)
     EditText recognizedTextField;
+
     @Bind(R.id.takePhotoButton)
     Button takePhotoButton;
+
     @Bind(R.id.cropButton)
     Button cropButton;
+
     @Bind(R.id.cropImageView)
     CropImageView cropImageView;
+
     @Bind(R.id.croppedImageView)
     ImageView croppedImageView;
 
@@ -70,7 +74,7 @@ public class StartActivity extends Activity {
         createCroppedBitmap();
         onPhotoTaken();
     }
-    
+
     @OnClick(R.id.recognizeFromFileButton)
     public void recognizeFromFileButtonClick(View view) {
 

@@ -12,22 +12,29 @@
     tools:context=".activities.StartActivity"
     tools:showIn="@layout/activity_start">
 
-    <Button
-        android:id="@+id/takePhotoButton"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/recognizeButtonText" />
+        android:weightSum="1.0">
+        <Button
+            android:id="@+id/takePhotoButton"
+            android:layout_weight="0.5"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:text="@string/recognizeButtonText" />
+        <Button
+            android:id="@+id/recognizeFromFileButton"
+            android:layout_weight="0.5"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:text="@string/recognizeFromFileButtonText" />
+    </LinearLayout>
+
     <Button
         android:id="@+id/cropButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/cropButtonText" />
-
-    <Button
-        android:id="@+id/recognizeFromFileButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/recognizeFromFileButtonText" />
 
     <EditText
         android:id="@+id/recognizedTextField"
