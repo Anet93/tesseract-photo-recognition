@@ -23,6 +23,12 @@
         android:layout_height="wrap_content"
         android:text="@string/cropButtonText" />
 
+    <Button
+        android:id="@+id/recognizeFromFileButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/recognizeFromFileButtonText" />
+
     <EditText
         android:id="@+id/recognizedTextField"
         android:layout_width="match_parent"
