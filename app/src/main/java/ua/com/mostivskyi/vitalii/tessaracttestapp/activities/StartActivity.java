@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.isseiaoki.simplecropview.CropImageView;
 
@@ -25,9 +26,13 @@ import butterknife.OnClick;
 import ua.com.mostivskyi.vitalii.tessaracttestapp.helpers.FileHelper;
 import ua.com.mostivskyi.vitalii.tessaracttestapp.R;
 import ua.com.mostivskyi.vitalii.tessaracttestapp.helpers.ImageHelper;
+import ua.com.mostivskyi.vitalii.tessaracttestapp.helpers.IntentUtils;
 import ua.com.mostivskyi.vitalii.tessaracttestapp.services.OCREngine;
 
 public class StartActivity extends Activity {
+
+    private static final int CAMERA_REQUEST_CODE = 999;
+    private static final int GALLERY_REQUEST_CODE = 1337;
 
     private static final String TAG = "TesseractTestApp";
     private static final String PhotoTakenInstanceStateName = "photo_taken";
@@ -43,12 +48,16 @@ public class StartActivity extends Activity {
 
     @Bind(R.id.recognizedTextField)
     EditText recognizedTextField;
+
     @Bind(R.id.takePhotoButton)
     Button takePhotoButton;
+
     @Bind(R.id.cropButton)
     Button cropButton;
+
     @Bind(R.id.cropImageView)
     CropImageView cropImageView;
+
     @Bind(R.id.croppedImageView)
     ImageView croppedImageView;
 
@@ -64,6 +73,13 @@ public class StartActivity extends Activity {
         croppedImageView.setImageBitmap(cropImageView.getCroppedBitmap());
         createCroppedBitmap();
         onPhotoTaken();
+    }
+
+    @OnClick(R.id.recognizeFromFileButton)
+    public void recognizeFromFileButtonClick(View view) {
+
+        Log.v(TAG, "Starting galary intent");
+        startActivityForResult(IntentUtils.getGalleryIntent(), GALLERY_REQUEST_CODE);
     }
 
     private void createCroppedBitmap() {
@@ -115,12 +131,27 @@ public class StartActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        Log.i(TAG, "onActivity resultCode: " + resultCode);
+        Log.i(TAG, "Received an  resultCode: " + requestCode + " " + resultCode + " " + data);
 
-        if (resultCode == -1) {
-            performCrop();
-        } else {
-            Log.v(TAG, "User cancelled");
+        switch (requestCode) {
+            case CAMERA_REQUEST_CODE:
+                if (resultCode == RESULT_OK) {
+                    performCrop();
+                } else {
+                    Log.v(TAG, "User cancelled");
+                }
+                break;
+
+            case GALLERY_REQUEST_CODE:
+                if (resultCode == RESULT_OK) {
+                    if (data != null) {
+                        Uri imageUri = data.getData();
+                        Log.v(TAG, imageUri.getPath());
+
+                        onPhotoSelected(imageUri);
+                    }
+                }
+                break;
         }
     }
 
@@ -161,7 +192,7 @@ public class StartActivity extends Activity {
         final Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
 
-        startActivityForResult(intent, 0);
+        startActivityForResult(intent, CAMERA_REQUEST_CODE);
     }
 
     protected void onPhotoTaken() {
@@ -176,6 +207,16 @@ public class StartActivity extends Activity {
         if (recognizedText.length() > 0) {
             recognizedTextField.setText(recognizedText);
             recognizedTextField.setSelection(recognizedTextField.getText().toString().length());
+        }
+    }
+
+    private void onPhotoSelected(Uri imageUri) {
+        Bitmap image = ImageHelper.getImage(this, imageUri);
+
+        if (image == null) {
+            Toast.makeText(this, getString(R.string.canNotOpenImageMessage), Toast.LENGTH_SHORT).show();
+        } else {
+            recognizedTextField.setText(OCREngine.recognize(image));
         }
     }
 }
