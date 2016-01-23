@@ -1,7 +1,6 @@
 package ua.com.mostivskyi.vitalii.tessaracttestapp.activities;
 
 import java.io.File;
-import java.io.FileOutputStream;
 
 import android.Manifest;
 import android.annotation.TargetApi;
@@ -157,7 +156,6 @@ public class StartActivity extends Activity implements ActivityCompat.OnRequestP
             case CROP_REQUEST_CODE:
                 if(resultCode == RESULT_OK) {
                         onPhotoRecognized();
-                        onPhotoRecognized();
                 }
         }
     }
@@ -213,16 +211,6 @@ public class StartActivity extends Activity implements ActivityCompat.OnRequestP
         if (recognizedText.length() > 0) {
             recognizedTextField.setText(recognizedText);
             recognizedTextField.setSelection(recognizedTextField.getText().toString().length());
-        }
-    }
-
-    private void onPhotoSelected(Uri imageUri) {
-        Bitmap image = ImageHelper.getImage(this, imageUri);
-
-        if (image == null) {
-            Toast.makeText(this, getString(R.string.canNotOpenImageMessage), Toast.LENGTH_SHORT).show();
-        } else {
-            recognizedTextField.setText(OCREngine.recognize(image));
         }
     }
 }
