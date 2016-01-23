@@ -148,8 +148,8 @@ public class StartActivity extends Activity implements ActivityCompat.OnRequestP
                 if (resultCode == RESULT_OK) {
                     if (data != null) {
                         Uri imageUri = data.getData();
-                        Log.v(TAG, imageUri.getPath());
-                        startCropActivity(String.valueOf(imageUri));
+                        String url = FileHelper.getRealPathFromURI(this, imageUri);
+                        startCropActivity(url);
                     }
                 }
                 break;
