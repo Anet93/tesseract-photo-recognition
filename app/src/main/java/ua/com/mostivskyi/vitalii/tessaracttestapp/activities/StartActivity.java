@@ -163,6 +163,7 @@ public class StartActivity extends Activity {
         cropImageView.setHandleSizeInDp(6);
         cropImageView.setTouchPaddingInDp(8);
         cropImageView.setMinFrameSizeInDp(50);
+        cropImageView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
     }
 
     @Override
