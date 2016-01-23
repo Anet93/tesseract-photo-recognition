@@ -67,7 +67,6 @@ public final class ImageHelper {
 
     public static Bitmap getImage(String path) {
         BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inSampleSize = 4;
 
         return BitmapFactory.decodeFile(path, options);
     }
@@ -76,17 +75,5 @@ public final class ImageHelper {
         Bitmap image = getImage(path);
 
         return fixCameraRotation(image, path);
-    }
-
-    public static Bitmap getImage(Context context, Uri uri) {
-        Bitmap image = null;
-
-        try {
-            image = MediaStore.Images.Media.getBitmap(context.getContentResolver(), uri);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return image;
     }
 }
