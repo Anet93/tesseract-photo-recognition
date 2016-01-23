@@ -1,14 +1,12 @@
 package ua.com.mostivskyi.vitalii.tessaracttestapp.activities;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 
 import com.isseiaoki.simplecropview.CropImageView;
 
@@ -56,11 +54,11 @@ public class CropActivity extends Activity {
         croppedImagePath = getIntent().getStringExtra(StartActivity.CROPED_IMAGE_PATH);
 
         String path = getIntent().getStringExtra(StartActivity.CROP_INTENT);
-        performCrop(path);
+        setUpCropView(path);
 
     }
 
-    protected void performCrop(String path) {
+    protected void setUpCropView(String path) {
         cropImageView.setCropMode(CropImageView.CropMode.RATIO_FREE);
         cropImageView.setImageBitmap(BitmapFactory.decodeFile(path));
         cropImageView.setFrameStrokeWeightInDp(1);
