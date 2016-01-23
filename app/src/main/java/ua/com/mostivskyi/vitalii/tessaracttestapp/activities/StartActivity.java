@@ -10,11 +10,14 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Camera;
+import android.hardware.camera2.CameraManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -41,9 +44,12 @@ public class StartActivity extends Activity implements ActivityCompat.OnRequestP
     private static final int CAMERA_REQUEST_CODE = 999;
     private static final int GALLERY_REQUEST_CODE = 1337;
     private static final int MY_PERMISSION_CODE = 285;
+    private static final int CROP_REQUEST_CODE = 2935;
 
     private static final String TAG = "TesseractTestApp";
     private static final String PhotoTakenInstanceStateName = "photo_taken";
+    private static final String CROP_INTENT = "crop";
+
 
     private OCREngine OCREngine;
 
@@ -69,7 +75,13 @@ public class StartActivity extends Activity implements ActivityCompat.OnRequestP
     @Bind(R.id.croppedImageView)
     ImageView croppedImageView;
 
-    @OnClick(R.id.takePhotoButton)
+    @Bind(R.id.fabCamera)
+    FloatingActionButton fabCamera;
+
+    @Bind(R.id.fabGallary)
+    FloatingActionButton fabGallary;
+
+    @OnClick(R.id.fabCamera)
     public void takePhotoButtonClick(View view) {
         Log.v(TAG, "Starting Camera app");
 
@@ -77,7 +89,6 @@ public class StartActivity extends Activity implements ActivityCompat.OnRequestP
         if (currentapiVersion >= Build.VERSION_CODES.M) {
             checkPermission();
         }
-        else
         startCameraActivity();
     }
 
@@ -168,6 +179,8 @@ public class StartActivity extends Activity implements ActivityCompat.OnRequestP
         switch (requestCode) {
             case CAMERA_REQUEST_CODE:
                 if (resultCode == RESULT_OK) {
+                    startCropActivity(capturedImagePath);
+
                     performCrop();
                 } else {
                     Log.v(TAG, "User cancelled");
@@ -185,6 +198,12 @@ public class StartActivity extends Activity implements ActivityCompat.OnRequestP
                 }
                 break;
         }
+    }
+
+    public void startCropActivity(String uri){
+        Intent crop = new Intent(this, CropActivity.class);
+        crop.putExtra(CROP_INTENT, uri);
+        startActivityForResult(crop, CROP_REQUEST_CODE);
     }
 
     protected void performCrop() {
