@@ -36,6 +36,7 @@ public class StartActivity extends Activity {
 
     private static final String TAG = "TesseractTestApp";
     private static final String PhotoTakenInstanceStateName = "photo_taken";
+    private static final String INTENT_PATH = "path";
 
     private OCREngine OCREngine;
 
@@ -121,7 +122,10 @@ public class StartActivity extends Activity {
     }
 
     private void setUpGlobals() {
-        assetsPath = Environment.getExternalStorageDirectory().toString() + getResources().getString(R.string.AssetsFilePath);
+//        assetsPath = Environment.getExternalStorageDirectory().toString() + getResources().getString(R.string.AssetsFilePath);
+
+        assetsPath = getExternalFilesDir(null).getPath()+getResources().getString(R.string.AssetsFilePath);
+
         capturedImagePath = assetsPath + getResources().getString(R.string.CapturedImageName);
         capturedCropImagePath = assetsPath + getResources().getString(R.string.CapturedCropImageName);
 
