@@ -1,6 +1,7 @@
 package ua.com.mostivskyi.vitalii.tessaracttestapp.helpers;
 
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.os.Environment;
 import android.util.Log;
 
@@ -19,7 +20,10 @@ public final class FileHelper {
     private static final String TrainDataExtension = ".traineddata";
 
     public static void UpdateAssets(Context context) {
-        String assetsPath = Environment.getExternalStorageDirectory().toString() + context.getResources().getString(R.string.AssetsFilePath);
+//        String assetsPath = Environment.getExternalStorageDirectory().toString() + context.getResources().getString(R.string.AssetsFilePath);
+
+        String assetsPath = context.getExternalFilesDir(null).toString() + context.getResources().getString(R.string.AssetsFilePath);
+
         String trainDataPath = context.getResources().getString(R.string.TrainDataPath);
         String lang = context.getResources().getString(R.string.Language);
 
@@ -33,7 +37,10 @@ public final class FileHelper {
         //copy drain data file from assets to sd card ((if not exists))
         if (!(new File(trainDataFilePath)).exists()) {
             try {
-                InputStream in = context.getAssets().open(trainDataPath + trainDataFileName);
+                AssetManager mngr = context.getAssets();
+//                InputStream in = mngr.open(trainDataPath + trainDataFileName);
+                String path = trainDataPath + trainDataFileName;
+                InputStream in = mngr.open(path);
                 OutputStream out = new FileOutputStream(trainDataFilePath);
                 copyFile(in, out);
 

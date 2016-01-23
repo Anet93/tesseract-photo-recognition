@@ -3,14 +3,24 @@ package ua.com.mostivskyi.vitalii.tessaracttestapp.activities;
 import java.io.File;
 import java.io.FileOutputStream;
 
+import android.Manifest;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Camera;
+import android.hardware.camera2.CameraManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -29,13 +39,17 @@ import ua.com.mostivskyi.vitalii.tessaracttestapp.helpers.ImageHelper;
 import ua.com.mostivskyi.vitalii.tessaracttestapp.helpers.IntentUtils;
 import ua.com.mostivskyi.vitalii.tessaracttestapp.services.OCREngine;
 
-public class StartActivity extends Activity {
+public class StartActivity extends Activity implements ActivityCompat.OnRequestPermissionsResultCallback{
 
     private static final int CAMERA_REQUEST_CODE = 999;
     private static final int GALLERY_REQUEST_CODE = 1337;
+    private static final int MY_PERMISSION_CODE = 285;
+    private static final int CROP_REQUEST_CODE = 2935;
 
     private static final String TAG = "TesseractTestApp";
     private static final String PhotoTakenInstanceStateName = "photo_taken";
+    private static final String CROP_INTENT = "crop";
+
 
     private OCREngine OCREngine;
 
@@ -61,10 +75,39 @@ public class StartActivity extends Activity {
     @Bind(R.id.croppedImageView)
     ImageView croppedImageView;
 
-    @OnClick(R.id.takePhotoButton)
+    @Bind(R.id.fabCamera)
+    FloatingActionButton fabCamera;
+
+    @Bind(R.id.fabGallary)
+    FloatingActionButton fabGallary;
+
+    @OnClick(R.id.fabCamera)
     public void takePhotoButtonClick(View view) {
         Log.v(TAG, "Starting Camera app");
+
+        int currentapiVersion = android.os.Build.VERSION.SDK_INT;
+        if (currentapiVersion >= Build.VERSION_CODES.M) {
+            checkPermission();
+        }
         startCameraActivity();
+    }
+
+    @TargetApi(Build.VERSION_CODES.M)
+    public void checkPermission(){
+        if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.CAMERA}, MY_PERMISSION_CODE);
+        }
+    }
+
+      @Override
+    public void onRequestPermissionsResult (int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == MY_PERMISSION_CODE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                startCameraActivity();            }
+            else {
+                Toast.makeText(this, getResources().getString(R.string.canNotOpenCameraMessage),Toast.LENGTH_LONG);
+            }
+        }
     }
 
     @OnClick(R.id.cropButton)
@@ -121,7 +164,7 @@ public class StartActivity extends Activity {
     }
 
     private void setUpGlobals() {
-        assetsPath = Environment.getExternalStorageDirectory().toString() + getResources().getString(R.string.AssetsFilePath);
+        assetsPath = getExternalFilesDir(null).getPath() + getResources().getString(R.string.AssetsFilePath);
         capturedImagePath = assetsPath + getResources().getString(R.string.CapturedImageName);
         capturedCropImagePath = assetsPath + getResources().getString(R.string.CapturedCropImageName);
 
@@ -136,6 +179,8 @@ public class StartActivity extends Activity {
         switch (requestCode) {
             case CAMERA_REQUEST_CODE:
                 if (resultCode == RESULT_OK) {
+                    startCropActivity(capturedImagePath);
+
                     performCrop();
                 } else {
                     Log.v(TAG, "User cancelled");
@@ -155,6 +200,12 @@ public class StartActivity extends Activity {
         }
     }
 
+    public void startCropActivity(String uri){
+        Intent crop = new Intent(this, CropActivity.class);
+        crop.putExtra(CROP_INTENT, uri);
+        startActivityForResult(crop, CROP_REQUEST_CODE);
+    }
+
     protected void performCrop() {
         cropImageView.setCropMode(CropImageView.CropMode.RATIO_FREE);
         cropImageView.setImageBitmap(BitmapFactory.decodeFile(capturedImagePath));
@@ -163,6 +214,7 @@ public class StartActivity extends Activity {
         cropImageView.setHandleSizeInDp(6);
         cropImageView.setTouchPaddingInDp(8);
         cropImageView.setMinFrameSizeInDp(50);
+        cropImageView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
     }
 
     @Override

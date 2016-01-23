@@ -57,4 +57,5 @@
         android:padding="16dp"
         custom:cropMode="ratio_1_1" />
 
+
 </LinearLayout>
