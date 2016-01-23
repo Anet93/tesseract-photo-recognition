@@ -156,9 +156,8 @@ public class StartActivity extends Activity implements ActivityCompat.OnRequestP
 
             case CROP_REQUEST_CODE:
                 if(resultCode == RESULT_OK) {
-                    if (data != null) {
                         onPhotoRecognized();
-                    }
+                        onPhotoRecognized();
                 }
         }
     }

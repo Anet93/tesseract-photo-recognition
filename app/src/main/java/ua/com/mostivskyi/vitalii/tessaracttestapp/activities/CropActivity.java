@@ -41,7 +41,7 @@ public class CropActivity extends Activity {
 
     private void closeIntent() {
 
-        setResult(RESULT_OK);
+        setResult(StartActivity.RESULT_OK);
         finish();
     }
 
