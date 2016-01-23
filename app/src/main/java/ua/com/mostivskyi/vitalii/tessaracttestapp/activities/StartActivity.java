@@ -9,26 +9,17 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Camera;
-import android.hardware.camera2.CameraManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
-
-import com.isseiaoki.simplecropview.CropImageView;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -43,13 +34,13 @@ public class StartActivity extends Activity implements ActivityCompat.OnRequestP
 
     private static final int CAMERA_REQUEST_CODE = 999;
     private static final int GALLERY_REQUEST_CODE = 1337;
-    private static final int MY_PERMISSION_CODE = 285;
+    private static final int CAMERA_PERMISSION_CODE = 285;
     private static final int CROP_REQUEST_CODE = 2935;
 
     private static final String TAG = "TesseractTestApp";
     private static final String PhotoTakenInstanceStateName = "photo_taken";
-    private static final String CROP_INTENT = "crop";
-
+    public static final String CROP_INTENT = "crop";
+    public static final String CROPED_IMAGE_PATH = "cropped_path";
 
     private OCREngine OCREngine;
 
@@ -62,15 +53,6 @@ public class StartActivity extends Activity implements ActivityCompat.OnRequestP
 
     @Bind(R.id.recognizedTextField)
     EditText recognizedTextField;
-
-    @Bind(R.id.takePhotoButton)
-    Button takePhotoButton;
-
-    @Bind(R.id.cropButton)
-    Button cropButton;
-
-    @Bind(R.id.cropImageView)
-    CropImageView cropImageView;
 
     @Bind(R.id.croppedImageView)
     ImageView croppedImageView;
@@ -95,13 +77,13 @@ public class StartActivity extends Activity implements ActivityCompat.OnRequestP
     @TargetApi(Build.VERSION_CODES.M)
     public void checkPermission(){
         if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{Manifest.permission.CAMERA}, MY_PERMISSION_CODE);
+            requestPermissions(new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_CODE);
         }
     }
 
-      @Override
+    @Override
     public void onRequestPermissionsResult (int requestCode, String[] permissions, int[] grantResults) {
-        if (requestCode == MY_PERMISSION_CODE) {
+        if (requestCode == CAMERA_PERMISSION_CODE) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 startCameraActivity();            }
             else {
@@ -110,35 +92,11 @@ public class StartActivity extends Activity implements ActivityCompat.OnRequestP
         }
     }
 
-    @OnClick(R.id.cropButton)
-    public void cropButtonClick(View view) {
-        Log.v(TAG, "Cropping");
-        croppedImageView.setImageBitmap(cropImageView.getCroppedBitmap());
-        createCroppedBitmap();
-        onPhotoTaken();
-    }
-
-    @OnClick(R.id.recognizeFromFileButton)
+    @OnClick(R.id.fabGallary)
     public void recognizeFromFileButtonClick(View view) {
 
         Log.v(TAG, "Starting galary intent");
         startActivityForResult(IntentUtils.getGalleryIntent(), GALLERY_REQUEST_CODE);
-    }
-
-    private void createCroppedBitmap() {
-
-        croppedImageView.setDrawingCacheEnabled(true);
-        bitmap = cropImageView.getCroppedBitmap();
-
-        File file = new File(capturedCropImagePath);
-        try {
-            file.createNewFile();
-            FileOutputStream ostream = new FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, ostream);
-            ostream.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
@@ -179,9 +137,8 @@ public class StartActivity extends Activity implements ActivityCompat.OnRequestP
         switch (requestCode) {
             case CAMERA_REQUEST_CODE:
                 if (resultCode == RESULT_OK) {
+                    isPhotoTaken = true;
                     startCropActivity(capturedImagePath);
-
-                    performCrop();
                 } else {
                     Log.v(TAG, "User cancelled");
                 }
@@ -192,29 +149,26 @@ public class StartActivity extends Activity implements ActivityCompat.OnRequestP
                     if (data != null) {
                         Uri imageUri = data.getData();
                         Log.v(TAG, imageUri.getPath());
-
-                        onPhotoSelected(imageUri);
+                        startCropActivity(String.valueOf(imageUri));
                     }
                 }
                 break;
+
+            case CROP_REQUEST_CODE:
+                if(resultCode == RESULT_OK) {
+                    if (data != null) {
+                        onPhotoRecognized(String.valueOf(data.getData()));
+                    }
+                }
         }
     }
 
     public void startCropActivity(String uri){
         Intent crop = new Intent(this, CropActivity.class);
+
+        crop.putExtra(CROPED_IMAGE_PATH, capturedCropImagePath);
         crop.putExtra(CROP_INTENT, uri);
         startActivityForResult(crop, CROP_REQUEST_CODE);
-    }
-
-    protected void performCrop() {
-        cropImageView.setCropMode(CropImageView.CropMode.RATIO_FREE);
-        cropImageView.setImageBitmap(BitmapFactory.decodeFile(capturedImagePath));
-        cropImageView.setFrameStrokeWeightInDp(1);
-        cropImageView.setGuideStrokeWeightInDp(1);
-        cropImageView.setHandleSizeInDp(6);
-        cropImageView.setTouchPaddingInDp(8);
-        cropImageView.setMinFrameSizeInDp(50);
-        cropImageView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
     }
 
     @Override
@@ -227,7 +181,7 @@ public class StartActivity extends Activity implements ActivityCompat.OnRequestP
         Log.i(TAG, "onRestoreInstanceState()");
 
         if (savedInstanceState.getBoolean(StartActivity.PhotoTakenInstanceStateName)) {
-            onPhotoTaken();
+
         }
     }
 
@@ -247,10 +201,11 @@ public class StartActivity extends Activity implements ActivityCompat.OnRequestP
         startActivityForResult(intent, CAMERA_REQUEST_CODE);
     }
 
-    protected void onPhotoTaken() {
-        isPhotoTaken = true;
+    protected void onPhotoRecognized(String path) {
 
-        Bitmap bitmap = ImageHelper.getCapturedImage(capturedCropImagePath);
+        Bitmap bitmap = ImageHelper.getCapturedImage(path);
+
+        croppedImageView.setImageBitmap(bitmap);
 
         Log.v(TAG, "Before OCREngine");
         String recognizedText = OCREngine.recognize(bitmap);

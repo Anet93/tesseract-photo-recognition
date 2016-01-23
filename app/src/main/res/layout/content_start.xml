@@ -12,30 +12,6 @@
     tools:context=".activities.StartActivity"
     tools:showIn="@layout/activity_start">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:weightSum="1.0">
-        <Button
-            android:id="@+id/takePhotoButton"
-            android:layout_weight="0.5"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:text="@string/recognizeButtonText" />
-        <Button
-            android:id="@+id/recognizeFromFileButton"
-            android:layout_weight="0.5"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:text="@string/recognizeFromFileButtonText" />
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/cropButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/cropButtonText" />
-
     <EditText
         android:id="@+id/recognizedTextField"
         android:layout_width="match_parent"
@@ -48,14 +24,5 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="16dp" />
-
-    <com.isseiaoki.simplecropview.CropImageView
-        xmlns:custom="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/cropImageView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="16dp"
-        custom:cropMode="ratio_1_1" />
-
 
 </LinearLayout>
