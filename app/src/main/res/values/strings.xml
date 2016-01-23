@@ -4,7 +4,7 @@
     <string name="recognizeButtonText">Recognize</string>
     <string name="recognizeFromFileButtonText">From file</string>
     <string name="text_hint">Recognized text will appear here</string>
-    <string name="cropButtonText">Crop</string>
+    <string name="cropButtonText"><b>Crop</b></string>
     <string name="canNotOpenImageMessage">Can`t open selected image</string>
     <string name="canNotOpenCameraMessage">Can`t open camera</string>
 

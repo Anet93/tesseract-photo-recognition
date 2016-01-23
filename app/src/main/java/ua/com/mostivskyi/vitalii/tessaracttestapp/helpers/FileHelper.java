@@ -89,8 +89,14 @@ public final class FileHelper {
             cursor = context.getContentResolver().query(contentUri,  proj, null, null, null);
             int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
             cursor.moveToFirst();
-            return cursor.getString(column_index);
-        } finally {
+            String path = cursor.getString(column_index);
+            return path;
+        }
+        catch (Exception e) {
+            Log.e("getRealPathFromURI", e.getMessage());
+            return "";
+        }
+        finally {
             if (cursor != null) {
                 cursor.close();
             }
