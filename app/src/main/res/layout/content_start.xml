@@ -20,7 +20,8 @@
         android:id="@+id/cardViewText"
         android:padding="32dp"
         android:layout_margin="16dp"
-        card_view:cardCornerRadius="6dp">
+        card_view:cardCornerRadius="6dp"
+        android:layout_weight="40">
 
         <EditText
             android:id="@+id/recognizedTextField"
@@ -36,7 +37,8 @@
         android:id="@+id/cardViewView"
         android:padding="32dp"
         android:layout_margin="16dp"
-        card_view:cardCornerRadius="6dp">
+        card_view:cardCornerRadius="6dp"
+        android:layout_weight="60">
 
         <ImageView
             android:id="@+id/croppedImageView"

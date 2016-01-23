@@ -23,20 +23,22 @@
 
     <include layout="@layout/content_start" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fabCamera"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@android:drawable/ic_menu_camera" />
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fabCamera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/fab_margin"
+            android:src="@android:drawable/ic_menu_camera"/>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fabGallary"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center_horizontal"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@android:drawable/ic_menu_gallery" />
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fabGallary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_margin="@dimen/fab_margin"
+            android:src="@android:drawable/ic_menu_gallery"
+            app:layout_anchor="@id/fabCamera"
+            app:layout_anchorGravity="top"/>
 
 </android.support.design.widget.CoordinatorLayout>

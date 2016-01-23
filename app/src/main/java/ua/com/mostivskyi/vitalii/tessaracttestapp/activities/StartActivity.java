@@ -2,7 +2,6 @@ package ua.com.mostivskyi.vitalii.tessaracttestapp.activities;
 
 import java.io.File;
 
-import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
@@ -65,30 +64,37 @@ public class StartActivity extends Activity implements ActivityCompat.OnRequestP
     @OnClick(R.id.fabCamera)
     public void takePhotoButtonClick(View view) {
         Log.v(TAG, "Starting Camera app");
-
-        int currentapiVersion = android.os.Build.VERSION.SDK_INT;
-        if (currentapiVersion >= Build.VERSION_CODES.M) {
-            checkPermission();
-        }
         startCameraActivity();
     }
 
     @TargetApi(Build.VERSION_CODES.M)
     public void checkPermission(){
-        if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_CODE);
-        }
+//        if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+//            requestPermissions(new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_CODE);
+//        }
+        String[] perms = {"android.permission.WRITE_EXTERNAL_STORAGE", "android.permission.CAMERA","android.permission.READ_EXTERNAL_STORAGE" };
+        int permsRequestCode = 200;
+        requestPermissions(perms, permsRequestCode);
+
     }
 
     @Override
     public void onRequestPermissionsResult (int requestCode, String[] permissions, int[] grantResults) {
-        if (requestCode == CAMERA_PERMISSION_CODE) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                startCameraActivity();            }
-            else {
-                Toast.makeText(this, getResources().getString(R.string.canNotOpenCameraMessage),Toast.LENGTH_LONG);
-            }
+        switch(requestCode){
+            case 200:
+                boolean WRITE_EXTERNAL_STORAGE = grantResults[0]==PackageManager.PERMISSION_GRANTED;
+                boolean cameraAccepted = grantResults[1]==PackageManager.PERMISSION_GRANTED;
+                boolean READ_EXTERNAL_STORAGE = grantResults[2]==PackageManager.PERMISSION_GRANTED;
+                break;
         }
+
+//        if (requestCode == CAMERA_PERMISSION_CODE) {
+//            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                startCameraActivity();            }
+//            else {
+//                Toast.makeText(this, getResources().getString(R.string.canNotOpenCameraMessage),Toast.LENGTH_LONG);
+//            }
+//        }
     }
 
     @OnClick(R.id.fabGallary)
@@ -103,6 +109,11 @@ public class StartActivity extends Activity implements ActivityCompat.OnRequestP
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
         ButterKnife.bind(this);
+
+        int currentapiVersion = android.os.Build.VERSION.SDK_INT;
+        if (currentapiVersion >= Build.VERSION_CODES.M) {
+            checkPermission();
+        }
 
         initialize();
     }
