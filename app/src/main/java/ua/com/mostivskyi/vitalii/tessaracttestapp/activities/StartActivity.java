@@ -156,9 +156,7 @@ public class StartActivity extends Activity implements ActivityCompat.OnRequestP
 
             case CROP_REQUEST_CODE:
                 if(resultCode == RESULT_OK) {
-                    if (data != null) {
-                        onPhotoRecognized(String.valueOf(data.getData()));
-                    }
+                        onPhotoRecognized();
                 }
         }
     }
@@ -201,9 +199,9 @@ public class StartActivity extends Activity implements ActivityCompat.OnRequestP
         startActivityForResult(intent, CAMERA_REQUEST_CODE);
     }
 
-    protected void onPhotoRecognized(String path) {
+    protected void onPhotoRecognized() {
 
-        Bitmap bitmap = ImageHelper.getCapturedImage(path);
+        Bitmap bitmap = ImageHelper.getCapturedImage(capturedCropImagePath);
 
         croppedImageView.setImageBitmap(bitmap);
 
