@@ -121,7 +121,7 @@ public class StartActivity extends Activity {
     }
 
     private void setUpGlobals() {
-        assetsPath = Environment.getExternalStorageDirectory().toString() + getResources().getString(R.string.AssetsFilePath);
+        assetsPath = getExternalFilesDir(null).getPath() + getResources().getString(R.string.AssetsFilePath);
         capturedImagePath = assetsPath + getResources().getString(R.string.CapturedImageName);
         capturedCropImagePath = assetsPath + getResources().getString(R.string.CapturedCropImageName);
 
