@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:weightSum="10"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -15,39 +16,36 @@
     tools:showIn="@layout/activity_start">
 
     <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/cardViewText"
         android:padding="32dp"
         android:layout_margin="4dp"
-        card_view:cardCornerRadius="6dp">
+        card_view:cardCornerRadius="6dp"
 
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="4">
         <EditText
             android:layout_margin="4dp"
             android:id="@+id/recognizedTextField"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="@string/text_hint" />
-
     </android.support.v7.widget.CardView>
 
     <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="260dp"
         android:id="@+id/cardViewView"
         android:padding="32dp"
         android:layout_margin="4dp"
-        card_view:cardCornerRadius="6dp">
+        card_view:cardCornerRadius="6dp"
 
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="6">
         <ImageView
             android:id="@+id/croppedImageView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:layout_margin="4dp" />
-
     </android.support.v7.widget.CardView>
-
-
-
 </LinearLayout>
