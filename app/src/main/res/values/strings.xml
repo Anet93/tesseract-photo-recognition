@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Tessaract Test App</string>
+    <string name="app_name">Photo recognizer</string>
     <string name="action_settings">Settings</string>
     <string name="recognizeButtonText">Recognize</string>
     <string name="recognizeFromFileButtonText">From file</string>
@@ -7,6 +7,5 @@
     <string name="cropButtonText"><b>Crop</b></string>
     <string name="canNotOpenImageMessage">Can`t open selected image</string>
     <string name="canNotOpenCameraMessage">Can`t open camera</string>
-
-
+    <string name="mainActivityTitle">Recognize photo</string>
 </resources>
