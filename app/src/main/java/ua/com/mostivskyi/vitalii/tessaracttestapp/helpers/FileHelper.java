@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -83,23 +84,17 @@ public final class FileHelper {
     }
 
     public static String getRealPathFromURI(Context context, Uri contentUri) {
-        Cursor cursor = null;
-        try {
-            String[] proj = { MediaStore.Images.Media.DATA };
-            cursor = context.getContentResolver().query(contentUri,  proj, null, null, null);
-            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-            cursor.moveToFirst();
-            String path = cursor.getString(column_index);
-            return path;
+        if (Build.VERSION.SDK_INT < 11) {
+            return RealPathHelper.getRealPathFromURI_BelowAPI11(context, contentUri);
         }
-        catch (Exception e) {
-            Log.e("getRealPathFromURI", e.getMessage());
-            return "";
-        }
-        finally {
-            if (cursor != null) {
-                cursor.close();
-            }
+
+        // SDK >= 11 && SDK < 19
+        else if (Build.VERSION.SDK_INT < 19){
+            return RealPathHelper.getRealPathFromURI_API11to18(context, contentUri);}
+
+            // SDK > 19 (Android 4.4)
+        else{
+            return RealPathHelper.getRealPathFromURI_API19(context, contentUri);
         }
     }
 }
