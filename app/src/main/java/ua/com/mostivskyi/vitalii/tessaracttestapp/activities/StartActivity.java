@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -60,6 +61,7 @@ public class StartActivity extends Activity implements ActivityCompat.OnRequestP
 
     @Bind(R.id.fabGallary)
     FloatingActionButton fabGallary;
+
 
     @OnClick(R.id.fabCamera)
     public void takePhotoButtonClick(View view) {
@@ -108,7 +110,6 @@ public class StartActivity extends Activity implements ActivityCompat.OnRequestP
     }
 
     private void initialize() {
-
         setUpGlobals();
         FileHelper.UpdateAssets(this);
         initializeOCR();
