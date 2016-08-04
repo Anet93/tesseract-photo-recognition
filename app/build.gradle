@@ -27,5 +27,5 @@ dependencies {
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.isseiaoki:simplecropview:1.0.13'
     compile 'com.android.support:cardview-v7:23.1.1'
-    compile project(':libraries:tess-two')
+    compile 'com.rmtheis:tess-two:6.0.3'
 }
